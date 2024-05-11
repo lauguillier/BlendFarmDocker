@@ -1,0 +1,24 @@
+From ubuntu:24.04
+
+
+RUN apt-get update && apt-get -y upgrade \
+&& apt-get -y install wget curl unzip libicu74 libx11-6 libxrender1 libxxf86vm1  libxfixes3 libxi6 libxkbcommon0 libsm6 libice6 libgl1 && apt-get clean \
+&& rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*               
+
+SHELL ["/bin/bash", "-c"]
+
+CMD ["/bin/bash"]
+
+ENV USER ubuntu
+ENV USER $USER
+ENV HOME /home/$USER
+USER $USER
+WORKDIR $HOME
+
+ENV BF_VERSION="1.1.6"
+ENV BF_ARCH="BlendFarm.Server-${BF_VERSION}-Linux64.zip"
+ENV BF_PATH="https://github.com/LogicReinc/LogicReinc.BlendFarm/releases/download/v${BF_VERSION}/BlendFarm.Server-${BF_VERSION}-Linux64.zip"
+
+RUN curl -SL $BF_PATH -o $BF_ARCH && unzip $BF_ARCH && rm $BF_ARCH
+
+ENTRYPOINT ./BlendFarm.Server-1.1.6-Linux64/LogicReinc.BlendFarm.Server
